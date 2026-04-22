@@ -145,6 +145,23 @@ export default function Login() {
                   </a>
                 </div>
               )}
+              {error.includes('unauthorized-domain') && (
+                <div className="mt-2 p-3 bg-white/50 rounded-xl border border-red-200 text-red-800">
+                  <p className="font-bold mb-1">Security Block: Domain not trusted</p>
+                  <p className="mb-2">Firebase doesn't trust this website yet. Copy the domain below and add it to your Firebase Console:</p>
+                  <code className="block p-2 bg-gray-900 text-green-400 rounded-lg mb-3 break-all select-all">
+                    {window.location.hostname}
+                  </code>
+                  <a 
+                    href="https://console.firebase.google.com/project/gen-lang-client-0792939957/authentication/settings" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="inline-block font-bold underline text-blue-600"
+                  >
+                    Go to Firebase Authorized Domains
+                  </a>
+                </div>
+              )}
             </div>
           )}
 
