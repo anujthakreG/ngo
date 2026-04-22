@@ -32,10 +32,10 @@ function Navbar({ user, onLogout }: NavbarProps) {
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-2 group">
             <div className="p-2 bg-orange-100 rounded-xl group-hover:bg-orange-200 transition-colors">
-              <Utensils className="h-6 w-6 text-orange-600" />
+              <Heart className="h-6 w-6 text-orange-600" />
             </div>
             <span className="font-sans font-bold text-xl tracking-tight text-gray-900">
-              FoodShare<span className="text-orange-600">Connect</span>
+              NGO<span className="text-orange-600">connect</span>
             </span>
           </Link>
 
@@ -149,13 +149,13 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <Utensils className="h-6 w-6 text-orange-600" />
+              <Heart className="h-6 w-6 text-orange-600" />
               <span className="font-sans font-bold text-xl tracking-tight text-gray-900">
-                FoodShare<span className="text-orange-600">Connect</span>
+                NGO<span className="text-orange-600">connect</span>
               </span>
             </Link>
             <p className="text-gray-600 max-w-sm leading-relaxed">
-              Our mission is to reduce food waste and combat hunger by connecting restaurants with surplus food to NGOs dedicated to feeding those in need.
+              NGOconnect streamlines food redistribution, connecting surplus providers with organizations fighting hunger in real-time.
             </p>
           </div>
           <div>

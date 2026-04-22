@@ -29,7 +29,10 @@ export default function Dashboard() {
     foodType: '',
     quantity: '',
     expiryTime: '',
-    description: ''
+    description: '',
+    temperature: 'Ambient' as const,
+    maxPickupDays: 1,
+    location: ''
   });
 
   useEffect(() => {
@@ -51,10 +54,21 @@ export default function Dashboard() {
         quantity: formData.quantity,
         expiryTime: new Date(formData.expiryTime).toISOString(),
         description: formData.description,
+        temperature: formData.temperature as any,
+        maxPickupDays: Number(formData.maxPickupDays),
+        location: formData.location || user.address || '',
         status: 'available'
       });
       setIsAddingFood(false);
-      setFormData({ foodType: '', quantity: '', expiryTime: '', description: '' });
+      setFormData({ 
+        foodType: '', 
+        quantity: '', 
+        expiryTime: '', 
+        description: '',
+        temperature: 'Ambient',
+        maxPickupDays: 1,
+        location: ''
+      });
     } catch (err) {
       console.error("Error creating listing:", err);
     }
@@ -194,6 +208,18 @@ export default function Dashboard() {
                     <AlertCircle className="h-4 w-4 text-orange-400" />
                     <span>Quantity: {listing.quantity}</span>
                   </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <MapPin className="h-4 w-4 text-orange-400" />
+                    <span>Pickup: {listing.location}</span>
+                  </div>
+                  <div className="flex items-center gap-4 mt-2">
+                    <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded text-[10px] font-bold">
+                      {listing.temperature || 'Ambient'}
+                    </span>
+                    <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-[10px] font-bold">
+                      {listing.maxPickupDays || 1} Day Pickup
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
@@ -279,6 +305,44 @@ export default function Dashboard() {
                       className="w-full px-4 py-3 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 outline-none" 
                     />
                   </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Storage Temp</label>
+                    <select 
+                      value={formData.temperature}
+                      onChange={(e) => setFormData({...formData, temperature: e.target.value as any})}
+                      className="w-full px-4 py-3 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 outline-none appearance-none"
+                    >
+                      <option value="Ambient">Ambient</option>
+                      <option value="Chilled">Chilled</option>
+                      <option value="Frozen">Frozen</option>
+                      <option value="Hot">Hot</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Max Pickup Days</label>
+                    <input 
+                      type="number" 
+                      min="1"
+                      max="7"
+                      required
+                      value={formData.maxPickupDays}
+                      onChange={(e) => setFormData({...formData, maxPickupDays: parseInt(e.target.value)})}
+                      className="w-full px-4 py-3 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Pickup Location</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={formData.location}
+                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 outline-none" 
+                    placeholder="e.g. Main Entrance, Floor 2"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>

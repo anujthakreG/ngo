@@ -19,6 +19,9 @@ export interface FoodListing {
   foodType: string;
   description: string;
   quantity: string;
+  temperature?: 'Ambient' | 'Chilled' | 'Frozen' | 'Hot';
+  maxPickupDays: number;
+  location: string;
   expiryTime: string;
   status: ListingStatus;
   claimedBy?: string;

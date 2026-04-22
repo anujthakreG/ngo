@@ -52,7 +52,11 @@ service cloud.firestore {
                data.foodType is string &&
                data.foodType.size() <= 100 &&
                data.status in ['available', 'claimed', 'completed'] &&
-               data.quantity is string;
+               data.quantity is string &&
+               data.location is string &&
+               data.maxPickupDays is number &&
+               data.maxPickupDays >= 1 &&
+               data.maxPickupDays <= 7;
       }
 
       allow list: if isSignedIn();

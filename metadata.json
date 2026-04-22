@@ -1,6 +1,6 @@
 {
-  "name": "FoodShare Connect",
-  "description": "A bridge between restaurants with surplus food and NGOs feeding those in need.",
+  "name": "NGOconnect",
+  "description": "Connecting restaurants and surplus food providers directly with NGOs.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
