@@ -37,8 +37,11 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const isGithubPages = window.location.hostname.includes('github.io');
+  const basename = isGithubPages ? '/ngo' : '/';
+
   return (
-    <BrowserRouter basename="/ngo">
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>
