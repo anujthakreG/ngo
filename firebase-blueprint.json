@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information including their role (Restaurant or NGO).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["restaurant", "ngo"] },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "FoodListing": {
+      "title": "Food Listing",
+      "description": "Surplus food offered by a restaurant.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "restaurantId": { "type": "string" },
+        "restaurantName": { "type": "string" },
+        "foodType": { "type": "string" },
+        "description": { "type": "string" },
+        "quantity": { "type": "string" },
+        "expiryTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["available", "claimed", "completed"] },
+        "claimedBy": { "type": "string" },
+        "ngoName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "restaurantId", "foodType", "quantity", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and roles."
+    },
+    "/listings/{listingId}": {
+      "schema": "FoodListing",
+      "description": "Surplus food listings available for claiming."
+    }
+  }
+}
