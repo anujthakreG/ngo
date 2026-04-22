@@ -37,6 +37,20 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "restaurantId", "foodType", "quantity", "status"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A message sent within a listing's chat room.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "listingId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["listingId", "senderId", "text"]
     }
   },
   "firestore": {
@@ -47,6 +61,10 @@
     "/listings/{listingId}": {
       "schema": "FoodListing",
       "description": "Surplus food listings available for claiming."
+    },
+    "/listings/{listingId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Messages for coordination between restaurant and NGO."
     }
   }
 }

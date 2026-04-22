@@ -86,6 +86,26 @@ service cloud.firestore {
       );
       
       allow delete: if false; // Prefer soft deletes or status updates
+
+      // 3. Discussion/Chat subcollection
+      match /messages/{messageId} {
+        function canChat() {
+          return isSignedIn() && (
+            resource == null || // Create
+            existing().listingId == listingId // Just a safety check
+          ) && (
+            get(/databases/$(database)/documents/listings/$(listingId)).data.restaurantId == request.auth.uid ||
+            get(/databases/$(database)/documents/listings/$(listingId)).data.claimedBy == request.auth.uid
+          );
+        }
+
+        allow list: if canChat();
+        allow create: if canChat() && 
+                      incoming().senderId == request.auth.uid &&
+                      incoming().listingId == listingId &&
+                      incoming().text is string &&
+                      incoming().text.size() <= 1000;
+      }
     }
   }
 }

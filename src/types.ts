@@ -29,3 +29,12 @@ export interface FoodListing {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ChatMessage {
+  id: string;
+  listingId: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: any;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Plus, 
   Search, 
@@ -11,18 +11,21 @@ import {
   AlertCircle,
   Filter,
   ChevronRight,
-  X
+  X,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useAuth } from '../contexts/AuthContext';
 import { createListing, claimListing, subscribeToListings, updateListingStatus } from '../lib/services';
 import { FoodListing } from '../types';
+import Chat from '../components/Chat';
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [listings, setListings] = useState<FoodListing[]>([]);
   const [isAddingFood, setIsAddingFood] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeChat, setActiveChat] = useState<FoodListing | null>(null);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -222,7 +225,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
                   {user?.role === 'ngo' && listing.status === 'available' ? (
                     <button 
                       onClick={() => handleClaim(listing.id)}
@@ -231,19 +234,30 @@ export default function Dashboard() {
                       Claim Food <ArrowRight className="h-4 w-4" />
                     </button>
                   ) : (
-                    <>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                        {listing.status === 'claimed' ? `Claimed by ${listing.ngoName}` : 'Available'}
-                      </span>
-                      {user?.role === 'restaurant' && listing.status === 'claimed' && (
-                         <button 
-                          onClick={() => updateListingStatus(listing.id, 'completed')}
-                          className="text-green-600 text-xs font-bold uppercase tracking-widest hover:underline"
+                    <div className="flex flex-col w-full gap-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                          {listing.status === 'claimed' ? `Claimed by ${listing.ngoName}` : 'Available'}
+                        </span>
+                        {user?.role === 'restaurant' && listing.status === 'claimed' && (
+                           <button 
+                            onClick={() => updateListingStatus(listing.id, 'completed')}
+                            className="text-green-600 text-xs font-bold uppercase tracking-widest hover:underline"
+                          >
+                            Complete
+                          </button>
+                        )}
+                      </div>
+                      {(listing.status === 'claimed' || listing.status === 'completed') && (
+                        <button 
+                          onClick={() => setActiveChat(listing)}
+                          className="w-full py-2 border-2 border-orange-100 text-orange-600 rounded-xl font-bold text-xs hover:bg-orange-50 transition-all flex items-center justify-center gap-2"
                         >
-                          Complete
+                          <MessageSquare className="h-4 w-4" />
+                          Coordinate Pickup
                         </button>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               </motion.div>
@@ -366,6 +380,29 @@ export default function Dashboard() {
           </motion.div>
         </div>
       )}
+      {/* Chat Drawer */}
+      <AnimatePresence>
+        {activeChat && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveChat(null)}
+              className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm z-[70]"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-[80] overflow-hidden flex flex-col"
+            >
+              <Chat listing={activeChat} onClose={() => setActiveChat(null)} />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
