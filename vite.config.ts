@@ -10,6 +10,9 @@ export default defineConfig(({mode}) => {
   return {
     base: isGithubPages ? '/ngo/' : '/',
     plugins: [react(), tailwindcss()],
+    preview: {
+      allowedHosts: true,
+    },
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
